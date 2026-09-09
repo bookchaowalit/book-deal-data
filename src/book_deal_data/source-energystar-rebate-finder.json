@@ -1,0 +1,41 @@
+{
+  "id": "energystar-rebate-finder",
+  "product": "book-deal-data",
+  "domain": "deal",
+  "schema_version": "deal.v1",
+  "fetch_url": "https://www.energystar.gov/rebate-finder",
+  "source_url": "https://www.energystar.gov/rebate-finder",
+  "access": "html",
+  "content_type": "text/html",
+  "category": "rebate",
+  "provider": "ENERGY STAR / U.S. EPA",
+  "title": "ENERGY STAR rebate finder",
+  "required_markers": [
+    "rebate finder",
+    "energy star"
+  ],
+  "generic_html": true,
+  "eligible_countries": [
+    "US"
+  ],
+  "eligibility_text": "ENERGY STAR rebate directory; location, product, purchase date and programme funding rules apply.",
+  "value_kind": "cash",
+  "value_amount": null,
+  "value_currency": null,
+  "value_guaranteed": null,
+  "cost_notes": "The adapter records only public programme metadata. Confirm current eligibility, price, availability and terms at the official source.",
+  "normalized_terms": {
+    "minimum_spend": null,
+    "discount_basis": "fixed",
+    "redemption_limit": "Rebate amount, eligible product and funding availability are set by the local programme.",
+    "purchase_required": true
+  },
+  "enabled": true,
+  "permission_status": "reviewed-public-read",
+  "reviewed_at": "2026-09-08",
+  "permission_evidence": "https://www.energystar.gov/robots.txt",
+  "owner": "bookchaowalit",
+  "min_interval_seconds": 21600,
+  "retention": "private local raw archive; operational retention; no automatic deletion",
+  "use": "public deal metadata for personal discovery; no source-body republication"
+}

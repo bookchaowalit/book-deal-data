@@ -1,0 +1,41 @@
+{
+  "id": "steam-bundle-offers",
+  "product": "book-deal-data",
+  "domain": "deal",
+  "schema_version": "deal.v1",
+  "fetch_url": "https://store.steampowered.com/",
+  "source_url": "https://store.steampowered.com/",
+  "access": "html",
+  "content_type": "text/html",
+  "category": "bundle",
+  "provider": "Steam / Valve",
+  "title": "Steam bundle offers",
+  "required_markers": [
+    "bundle",
+    "steam"
+  ],
+  "generic_html": true,
+  "eligible_countries": [
+    "GLOBAL"
+  ],
+  "eligibility_text": "Humble Bundle public bundle marketplace; account, payment, region and offer terms apply.",
+  "value_kind": "discount",
+  "value_amount": null,
+  "value_currency": null,
+  "value_guaranteed": null,
+  "cost_notes": "The adapter records only public programme metadata. Confirm current eligibility, price, availability and terms at the official source.",
+  "normalized_terms": {
+    "minimum_spend": null,
+    "discount_basis": "bundle",
+    "redemption_limit": "Bundle contents, tier pricing, region and end dates are offer-specific.",
+    "purchase_required": true
+  },
+  "enabled": true,
+  "permission_status": "reviewed-public-read",
+  "reviewed_at": "2026-09-08",
+  "permission_evidence": "https://store.steampowered.com/robots.txt",
+  "owner": "bookchaowalit",
+  "min_interval_seconds": 21600,
+  "retention": "private local raw archive; operational retention; no automatic deletion",
+  "use": "public deal metadata for personal discovery; no source-body republication"
+}

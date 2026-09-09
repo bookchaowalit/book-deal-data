@@ -1,0 +1,28 @@
+{
+  "domain": "deal",
+  "enabled_sources": [
+    "apple-education-college-offer-2026",
+    "microsoft-education-coupon",
+    "rakuten-cashback",
+    "energystar-rebate-finder",
+    "steam-bundle-offers",
+    "dropbox-referral-program"
+  ],
+  "candidate_source_classes": [
+    "official program API or export",
+    "official RSS or announcement feed",
+    "official public program page"
+  ],
+  "enabled_category_capabilities": [
+    "coupon",
+    "cashback",
+    "rebate",
+    "discount",
+    "bundle",
+    "referral-promotion"
+  ],
+  "permission_status": "reviewed-public-read",
+  "network_enabled": true,
+  "policy_file": "src/book_deal_data/source.json",
+  "notes": "Six manually invoked official sources. Six-hour minimum interval. No schedule, account action or remote writes."
+}

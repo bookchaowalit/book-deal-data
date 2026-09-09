@@ -1,0 +1,41 @@
+{
+  "id": "microsoft-education-coupon",
+  "product": "book-deal-data",
+  "domain": "deal",
+  "schema_version": "deal.v1",
+  "fetch_url": "https://www.microsoft.com/en-us/education",
+  "source_url": "https://www.microsoft.com/en-us/education",
+  "access": "html",
+  "content_type": "text/html",
+  "category": "coupon",
+  "provider": "Microsoft",
+  "title": "Microsoft education offers",
+  "required_markers": [
+    "education",
+    "student"
+  ],
+  "generic_html": true,
+  "eligible_countries": [
+    "US"
+  ],
+  "eligibility_text": "Microsoft education store offers; eligible students, educators and institutions must verify current terms.",
+  "value_kind": "discount",
+  "value_amount": null,
+  "value_currency": null,
+  "value_guaranteed": null,
+  "cost_notes": "The adapter records only public programme metadata. Confirm current eligibility, price, availability and terms at the official source.",
+  "normalized_terms": {
+    "minimum_spend": null,
+    "discount_basis": "percentage",
+    "redemption_limit": "Offer, product, account and date restrictions are set by Microsoft.",
+    "purchase_required": true
+  },
+  "enabled": true,
+  "permission_status": "reviewed-public-read",
+  "reviewed_at": "2026-09-08",
+  "permission_evidence": "https://www.microsoft.com/robots.txt",
+  "owner": "bookchaowalit",
+  "min_interval_seconds": 21600,
+  "retention": "private local raw archive; operational retention; no automatic deletion",
+  "use": "public deal metadata for personal discovery; no source-body republication"
+}

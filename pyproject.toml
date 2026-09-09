@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "book-deal-data"
+version = "0.1.0"
+description = "Compare conditional savings against required spending and renewal."
+requires-python = ">=3.10"
+dependencies = ["jsonschema==4.19.2"]
+
+[project.scripts]
+book-deal-data = "book_deal_data.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+book_deal_data = ["*.json"]
