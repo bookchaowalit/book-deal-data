@@ -32,9 +32,10 @@ class Text(HTMLParser):
 
 
 REQUIRED_MARKERS = (
-    "college student offer 2026",
     "education",
     "apple gift card",
+    "qualified purchasers",
+    "eligible mac or ipad",
 )
 
 
