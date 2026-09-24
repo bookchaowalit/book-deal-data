@@ -3,7 +3,7 @@ import argparse
 import os
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import datetime
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -86,10 +86,7 @@ def normalize(raw, source, checked_at):
     status = "unknown"
     match = re.search(r"through ([A-Z][a-z]+ \d{1,2}, \d{4})", text)
     if match:
-        cutoff = datetime.strptime(match.group(1), "%B %d, %Y").replace(tzinfo=timezone.utc)
-        deadline = {"kind": "fixed", "at": cutoff.isoformat().replace("+00:00", "Z")}
-        checked = datetime.fromisoformat(checked_at.replace("Z", "+00:00"))
-        status = "open" if cutoff > checked else "closed"
+        datetime.strptime(match.group(1), "%B %d, %Y")
     item = {
         "id": source["id"],
         "title": source["title"],
@@ -115,7 +112,11 @@ def normalize(raw, source, checked_at):
         "terms": {
             "minimum_spend": None,
             "discount_basis": "percentage",
-            "redemption_limit": "Select products and education discount terms apply; review exclusions before purchase.",
+            "redemption_limit": (
+                "Select products and education discount terms apply; review exclusions before purchase. "
+                f"Published end date: {match.group(1) if match else 'not found'}. "
+                "The source does not specify a cutoff time or time zone."
+            ),
             "purchase_required": True,
         },
         "related_records": [],

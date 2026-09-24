@@ -18,8 +18,28 @@ class SourceTests(unittest.TestCase):
         item["provenance"].update(raw_object_key="landing/test", bronze_manifest_key="control/manifests/test")
         self.assertEqual(item["category"], "discount")
         self.assertEqual(item["title"], "Apple Education Store Gift Card Offer 2026")
-        self.assertEqual(item["deadline"], {"kind": "fixed", "at": "2026-09-24T00:00:00Z"})
+        self.assertEqual(item["deadline"], {"kind": "unknown", "at": None})
+        self.assertEqual(item["status"], "unknown")
+        self.assertIn("September 24, 2026", item["terms"]["redemption_limit"])
         self.assertIsNone(item["terms"]["minimum_spend"])
+        self.assertEqual(validate(data)["schema_version"], "deal.v1")
+
+    def test_date_only_promotion_end_does_not_invent_midnight_utc(self):
+        raw = (
+            b"<p>Education Apple Gift Card for Qualified Purchasers.</p>"
+            b"<p>Qualified Purchasers receive an Apple Gift Card with an eligible Mac or iPad "
+            b"through September 24, 2026.</p>"
+        )
+        data = normalize(
+            raw,
+            source_config("apple-education-college-offer-2026"),
+            "2026-09-24T02:15:08Z",
+        )
+        item = data["items"][0]
+        item["provenance"].update(raw_object_key="landing/test", bronze_manifest_key="control/manifests/test")
+        self.assertEqual(item["deadline"], {"kind": "unknown", "at": None})
+        self.assertEqual(item["status"], "unknown")
+        self.assertIn("September 24, 2026", item["terms"]["redemption_limit"])
         self.assertEqual(validate(data)["schema_version"], "deal.v1")
 
     def test_source_drift_is_rejected(self):
