@@ -3,11 +3,11 @@ import argparse
 import os
 import re
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 
-from .cli import resource, validate
+from .cli import resource, timestamp, validate
 
 
 class Text(HTMLParser):
@@ -86,7 +86,12 @@ def normalize(raw, source, checked_at):
     status = "unknown"
     match = re.search(r"through ([A-Z][a-z]+ \d{1,2}, \d{4})", text)
     if match:
-        datetime.strptime(match.group(1), "%B %d, %Y")
+        end_day = datetime.strptime(match.group(1), "%B %d, %Y").replace(tzinfo=timezone.utc)
+        # The page gives a date without a cutoff time or zone. That day has ended
+        # in every zone (UTC-12..UTC+14) by 00:00 UTC two days later, so only then
+        # is "closed" certain; before that the status stays unknown.
+        if timestamp(checked_at) >= end_day + timedelta(days=2):
+            status = "closed"
     item = {
         "id": source["id"],
         "title": source["title"],

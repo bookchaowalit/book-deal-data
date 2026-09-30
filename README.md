@@ -57,7 +57,10 @@ does not verify that referenced lake objects exist or prove source truth.
 Owner: bookchaowalit. Public program metadata only; no applications, personal
 screening answers, financial credentials, cookies, or private transcripts.
 See `sources.json` and the source policy under `src/`: Apple's public education
-offer page is enabled for public metadata only. Exact source
+offer page is enabled for public metadata only. Its "through <date>" end date is
+date-only (no time or zone), so the record keeps `deadline.kind = unknown` and
+reports `status: closed` only from 00:00 UTC two days after that date, when the
+day has ended in every time zone; before then status stays `unknown`. Exact source
 permission and retention remain reviewed per source. No spending, account
 creation or messaging.
 
