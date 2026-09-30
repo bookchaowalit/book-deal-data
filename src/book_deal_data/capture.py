@@ -71,9 +71,9 @@ def _normalize_generic(raw, source, checked_at):
 
 
 def normalize(raw, source, checked_at):
+    """Turn one reviewed public offer page into one conservative record."""
     if source.get('generic_html'):
         return _normalize_generic(raw, source, checked_at)
-    """Turn Apple's public education offer page into one conservative record."""
     if source["id"] != "apple-education-college-offer-2026":
         raise ValueError("unknown deal source")
     parser = Text()
