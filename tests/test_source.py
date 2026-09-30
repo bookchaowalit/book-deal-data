@@ -72,6 +72,15 @@ class SourceTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             normalize(raw, source_config("apple-education-college-offer-2026"), "2026-09-08T00:00:00Z")
 
+    def test_end_date_parse_is_locale_independent_and_strict(self):
+        from book_deal_data.capture import english_date
+
+        self.assertEqual(english_date("September 24, 2026").isoformat(), "2026-09-24T00:00:00+00:00")
+        self.assertEqual(english_date("SEPTEMBER 4, 2026").isoformat(), "2026-09-04T00:00:00+00:00")
+        for value in ("Septembre 24, 2026", "September 31, 2026", "Sept 24, 2026", "September 24 2026"):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                english_date(value)
+
     def test_source_drift_is_rejected(self):
         with self.assertRaises(ValueError):
             normalize(b"<h1>unrelated page</h1>", source_config(), "2026-09-08T00:00:00Z")
