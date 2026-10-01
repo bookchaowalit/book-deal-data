@@ -3,11 +3,32 @@ import argparse
 import os
 import re
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 
-from .cli import resource, validate
+from .cli import resource, timestamp, validate
+
+MONTHS = {
+    name: number
+    for number, name in enumerate(
+        ("january", "february", "march", "april", "may", "june", "july", "august",
+         "september", "october", "november", "december"),
+        1,
+    )
+}
+
+
+def english_date(value):
+    """'September 24, 2026' -> midnight UTC of that calendar day.
+
+    Month names are matched explicitly so the host locale (which drives strptime
+    %B) cannot change or break the parse.
+    """
+    match = re.fullmatch(r"([A-Za-z]+) (\d{1,2}), (\d{4})", value)
+    if not match or match.group(1).casefold() not in MONTHS:
+        raise ValueError("unsupported English date")
+    return datetime(int(match.group(3)), MONTHS[match.group(1).casefold()], int(match.group(2)), tzinfo=timezone.utc)
 
 
 class Text(HTMLParser):
@@ -71,9 +92,9 @@ def _normalize_generic(raw, source, checked_at):
 
 
 def normalize(raw, source, checked_at):
+    """Turn one reviewed public offer page into one conservative record."""
     if source.get('generic_html'):
         return _normalize_generic(raw, source, checked_at)
-    """Turn Apple's public education offer page into one conservative record."""
     if source["id"] != "apple-education-college-offer-2026":
         raise ValueError("unknown deal source")
     parser = Text()
@@ -86,7 +107,12 @@ def normalize(raw, source, checked_at):
     status = "unknown"
     match = re.search(r"through ([A-Z][a-z]+ \d{1,2}, \d{4})", text)
     if match:
-        datetime.strptime(match.group(1), "%B %d, %Y")
+        end_day = english_date(match.group(1))
+        # The page gives a date without a cutoff time or zone. That day has ended
+        # in every zone (UTC-12..UTC+14) by 00:00 UTC two days later, so only then
+        # is "closed" certain; before that the status stays unknown.
+        if timestamp(checked_at) >= end_day + timedelta(days=2):
+            status = "closed"
     item = {
         "id": source["id"],
         "title": source["title"],

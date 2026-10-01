@@ -31,7 +31,13 @@ book-deal-data demo --open-only
 book-deal-data demo --query "coupon"
 book-deal-data validate src/book_deal_data/demo.json
 python -m unittest discover -s tests -v
+python -m pip install -e ".[dev]"  # pytest + pinned ruff
+ruff check . && python -m pytest -q
 ```
+
+CI (`.github/workflows/ci.yml`) runs `ruff check`, the offline test suite and a
+CLI smoke test on Python 3.10 and 3.13. `tests/test_registry.py` keeps
+`sources.json`, the packaged `source*.json` configs and the contract in sync.
 
 With dependencies already available, use `PYTHONPATH=src python3 -m book_deal_data`.
 `demo` uses the fixed synthetic clock 2026-09-07T00:00:00Z unless `--as-of` is
@@ -51,7 +57,10 @@ does not verify that referenced lake objects exist or prove source truth.
 Owner: bookchaowalit. Public program metadata only; no applications, personal
 screening answers, financial credentials, cookies, or private transcripts.
 See `sources.json` and the source policy under `src/`: Apple's public education
-offer page is enabled for public metadata only. Exact source
+offer page is enabled for public metadata only. Its "through <date>" end date is
+date-only (no time or zone), so the record keeps `deadline.kind = unknown` and
+reports `status: closed` only from 00:00 UTC two days after that date, when the
+day has ended in every time zone; before then status stays `unknown`. Exact source
 permission and retention remain reviewed per source. No spending, account
 creation or messaging.
 
