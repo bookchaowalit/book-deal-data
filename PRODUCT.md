@@ -24,7 +24,7 @@ description: Outcome, consumers, ownership, contract, quality, privacy, and oper
 
 - Decision or user outcome: Compare conditional savings against required spending and renewal.
 - Consumers and use cases: Discovery applications; integration planned.
-- Source systems and lake layers: Apple College Student Offer 2026 public page → immutable landing → Bronze planned locally.
+- Source systems and lake layers: Six reviewed public offer pages (Apple education, Microsoft Education, Rakuten, ENERGY STAR Rebate Finder, Steam bundles, Dropbox referral) → immutable landing → Bronze through the shared local runtime.
 - In scope/out of scope: Offers requiring purchase or a commercial condition; zero-price claims belong to freebie.
 - Freshness, availability, and volume expectation: Target source review every 24h; open filter rejects checks older than 72h; no live SLA.
 - Data classification, residency, retention, and access: Public program metadata only; no user profile; raw retention is private local operational storage.
