@@ -1,4 +1,5 @@
 """Capture one reviewed public discount page through the shared lake runtime."""
+
 import argparse
 import os
 import re
@@ -12,8 +13,20 @@ from .cli import resource, timestamp, validate
 MONTHS = {
     name: number
     for number, name in enumerate(
-        ("january", "february", "march", "april", "may", "june", "july", "august",
-         "september", "october", "november", "december"),
+        (
+            "january",
+            "february",
+            "march",
+            "april",
+            "may",
+            "june",
+            "july",
+            "august",
+            "september",
+            "october",
+            "november",
+            "december",
+        ),
         1,
     )
 }
@@ -61,39 +74,60 @@ REQUIRED_MARKERS = (
 
 
 def _normalize_generic(raw, source, checked_at):
-    parser = Text(); parser.feed(raw.decode('utf-8'))
-    text = ' '.join(' '.join(parser.parts).split())
+    parser = Text()
+    parser.feed(raw.decode("utf-8"))
+    text = " ".join(" ".join(parser.parts).split())
     folded = text.casefold()
-    markers = source.get('required_markers') or [source['title']]
+    markers = source.get("required_markers") or [source["title"]]
     if not all(marker.casefold() in folded for marker in markers):
-        raise ValueError('generic deal source drift or challenge page')
-    record_id = source['id']
+        raise ValueError("generic deal source drift or challenge page")
+    record_id = source["id"]
     item = {
-        'id': record_id, 'title': source['title'], 'category': source['category'],
-        'source_url': source['source_url'], 'provider': source['provider'],
-        'status': source.get('status', 'unknown'),
-        'deadline': {'kind': source.get('deadline_kind', 'unknown'), 'at': None},
-        'eligible_countries': source.get('eligible_countries', ['GLOBAL']),
-        'eligibility_text': source['eligibility_text'],
-        'value': {'kind': source.get('value_kind', 'discount'), 'amount': source.get('value_amount'),
-                  'currency': source.get('value_currency'), 'guaranteed': source.get('value_guaranteed')},
-        'cost': {'fee_amount': None, 'currency': None, 'auto_renewal': None, 'notes': source['cost_notes']},
-        'terms': {'minimum_spend': None, 'discount_basis': source.get('discount_basis', 'unknown'),
-                  'redemption_limit': 'Not extracted; review the current official offer terms.',
-                  'purchase_required': source.get('purchase_required', True),
-                  **source.get('normalized_terms', {})},
-        'related_records': [],
-        'provenance': {'evidence_kind': 'captured', 'source_id': source['id'],
-                       'source_record_id': record_id, 'checked_at': checked_at,
-                       'raw_object_key': None, 'bronze_manifest_key': None},
+        "id": record_id,
+        "title": source["title"],
+        "category": source["category"],
+        "source_url": source["source_url"],
+        "provider": source["provider"],
+        "status": source.get("status", "unknown"),
+        "deadline": {"kind": source.get("deadline_kind", "unknown"), "at": None},
+        "eligible_countries": source.get("eligible_countries", ["GLOBAL"]),
+        "eligibility_text": source["eligibility_text"],
+        "value": {
+            "kind": source.get("value_kind", "discount"),
+            "amount": source.get("value_amount"),
+            "currency": source.get("value_currency"),
+            "guaranteed": source.get("value_guaranteed"),
+        },
+        "cost": {"fee_amount": None, "currency": None, "auto_renewal": None, "notes": source["cost_notes"]},
+        "terms": {
+            "minimum_spend": None,
+            "discount_basis": source.get("discount_basis", "unknown"),
+            "redemption_limit": "Not extracted; review the current official offer terms.",
+            "purchase_required": source.get("purchase_required", True),
+            **source.get("normalized_terms", {}),
+        },
+        "related_records": [],
+        "provenance": {
+            "evidence_kind": "captured",
+            "source_id": source["id"],
+            "source_record_id": record_id,
+            "checked_at": checked_at,
+            "raw_object_key": None,
+            "bronze_manifest_key": None,
+        },
     }
-    return {'schema_version': source['schema_version'], 'source': source['product'],
-            'retrieved_at': checked_at, 'data_status': 'live', 'items': [item]}
+    return {
+        "schema_version": source["schema_version"],
+        "source": source["product"],
+        "retrieved_at": checked_at,
+        "data_status": "live",
+        "items": [item],
+    }
 
 
 def normalize(raw, source, checked_at):
     """Turn one reviewed public offer page into one conservative record."""
-    if source.get('generic_html'):
+    if source.get("generic_html"):
         return _normalize_generic(raw, source, checked_at)
     if source["id"] != "apple-education-college-offer-2026":
         raise ValueError("unknown deal source")
